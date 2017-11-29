@@ -3,12 +3,11 @@ import string
 
 from django.conf import settings
 
-
-SHORTCODE_MIN = getattr(settings, "SHORTCODE_MIN", 8)
+SHORTCODE_MIN = getattr(settings, "SHORTCODE_MIN", 6)
 
 
 # 대문자 소문자 숫자를 랜덤으로 8개를 조합하여 새로운 url을 생성하는 함수
-def code_generator(size=8, chars=string.ascii_lowercase + string.ascii_uppercase + string.digits):
+def code_generator(size=SHORTCODE_MIN, chars=string.ascii_lowercase + string.ascii_uppercase + string.digits):
     new_code = ''
     for _ in range(size):
         new_code += random.choice(chars)
@@ -17,7 +16,7 @@ def code_generator(size=8, chars=string.ascii_lowercase + string.ascii_uppercase
 
 
 # 원래의 url에 새로운 url을 할당하는 함수
-def create_shortcode(instance, size=8):
+def create_shortcode(instance, size=SHORTCODE_MIN):
     new_code = code_generator(size=size)
     print(instance) # test
     instance_class = instance.__class__

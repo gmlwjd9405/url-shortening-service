@@ -1,5 +1,8 @@
+from django.conf import settings
 from django.db import models
 from .utils import code_generator, create_shortcode
+
+SHORTCODE_MAX = getattr(settings, "SHORTCODE_MAX", 8)
 
 
 class ShortenerURLManager(models.Manager):
@@ -13,7 +16,7 @@ class ShortenerURLManager(models.Manager):
 
         # if items is not None and isinstance(items, int):
         #     qs = qs.order_by('-id')[:items]
-        # new_codes = 0
+        new_codes = 0
 
         for q in qs:
             q.shortcode = create_shortcode(q)
@@ -25,7 +28,7 @@ class ShortenerURLManager(models.Manager):
 
 class ShortenerURL(models.Model):
     url = models.CharField(max_length=220, )
-    shortcode = models.CharField(max_length=8, unique=True, blank=True)
+    shortcode = models.CharField(max_length=SHORTCODE_MAX, unique=True, blank=True)
     #shortcode = models.CharField(max_length=8, null=False, blank=False)
     created_time = models.DateTimeField(auto_now_add=True)
     modified_time = models.DateTimeField(auto_now=True)
