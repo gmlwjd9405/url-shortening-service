@@ -1,6 +1,9 @@
 from django.conf import settings
 from django.db import models
+# from django_hosts.resolvers import reverse
+from django.core.urlresolvers import reverse
 from .utils import code_generator, create_shortcode
+from .validators import validate_url
 
 SHORTCODE_MAX = getattr(settings, "SHORTCODE_MAX", 8)
 
@@ -27,7 +30,7 @@ class ShortenerURLManager(models.Manager):
 
 
 class ShortenerURL(models.Model):
-    url = models.CharField(max_length=220, )
+    url = models.CharField(max_length=220, validators=[validate_url])
     shortcode = models.CharField(max_length=SHORTCODE_MAX, unique=True, blank=True)
     #shortcode = models.CharField(max_length=8, null=False, blank=False)
     created_time = models.DateTimeField(auto_now_add=True)
@@ -41,7 +44,17 @@ class ShortenerURL(models.Model):
         if self.shortcode is None or self.shortcode == "":
             self.shortcode = create_shortcode(self)
 
+        # 입력한 url에 http가 없으면 붙여서 저장한다
+        if not "http" in self.url:
+            self.url = "http://" + self.url
+
         super(ShortenerURL, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.url)
+
+    # 뷰 함수에서 URL을 하드코딩하지 않도록
+    def get_short_url(self):
+        url_path = reverse("scode", kwargs={'shortcode': self.shortcode})
+        url = "http://localhost:8000" + url_path
+        return url
