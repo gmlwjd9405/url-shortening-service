@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ object.shortcode }} | {{ block.super }}
+{% endblock title %}
+
+{% block styles %}
+<style>
+body {
+      background-color: #7a1b1b;
+    }
+    .btn-link {
+      color: #50dfec;
+      text-shadow: none;
+    }
+    .btn-link:hover {
+      color: #000000;
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class=''>
+    <h1>Exists Already</h1>
+
+    <p>{{ object.url }}</p>
+
+    <p><a class='btn btn-link' href='{{ object.get_short_url }}'>{{ object.get_short_url }}</a></p>
+    <a class='btn btn-default' href='/'>+ New</a>
+</div>
+{% endblock content %}
