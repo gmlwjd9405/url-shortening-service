@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 # from django_hosts.resolvers import reverse
 from django.core.urlresolvers import reverse
-from .utils import code_generator, create_shortcode
+from .utils import code_generator, create_shortcode, encode_id
 from .validators import validate_url
 
 SHORTCODE_MAX = getattr(settings, "SHORTCODE_MAX", 8)
@@ -22,8 +22,8 @@ class ShortenerURLManager(models.Manager):
         new_codes = 0
 
         for q in qs:
-            q.shortcode = create_shortcode(q)
-            print(q.id)
+            # q.shortcode = create_shortcode(q)
+            q.shortcode = encode_id(q)
             q.save()
             new_codes += 1
         return "New codes made: {i}".format(i=new_codes)
@@ -36,13 +36,16 @@ class ShortenerURL(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
     modified_time = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
+    id = models.AutoField(primary_key=True)
 
     objects = ShortenerURLManager()
 
     def save(self, *args, **kwargs):
         # shortcode가 없거나 빈 문자열인 경우 새로운 url을 할당한다
         if self.shortcode is None or self.shortcode == "":
-            self.shortcode = create_shortcode(self)
+            print('+++++++++++save q.id: ', self.id)
+            # self.shortcode = create_shortcode(self)
+            self.shortcode = encode_id(self)
 
         # 입력한 url에 http가 없으면 붙여서 저장한다
         if not "http" in self.url:
