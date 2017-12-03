@@ -41,6 +41,8 @@ class ShortenerURL(models.Model):
     objects = ShortenerURLManager()
 
     def save(self, *args, **kwargs):
+        super(ShortenerURL, self).save(*args, **kwargs)
+
         # shortcode가 없거나 빈 문자열인 경우 새로운 url을 할당한다
         if self.shortcode is None or self.shortcode == "":
             print('+++++++++++save q.id: ', self.id)
@@ -51,7 +53,7 @@ class ShortenerURL(models.Model):
         if not "http" in self.url:
             self.url = "http://" + self.url
 
-        super(ShortenerURL, self).save(*args, **kwargs)
+        super(ShortenerURL, self).save()
 
     def __str__(self):
         return str(self.url)
