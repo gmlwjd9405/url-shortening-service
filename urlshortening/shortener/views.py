@@ -9,7 +9,7 @@ from .models import ShortenerURL
 class HomeView(View):
     def get(self, request, *args, **kwargs):
         the_form = SubmitUrlForm()
-        bg_image = 'https://cdn.pixabay.com/photo/2017/06/27/05/33/shanghai-2446326_1280.jpg'
+        bg_image = "../static/img/background.jpg"
         context = {
             "title": "URL Shortening Service",
             "form": the_form,
