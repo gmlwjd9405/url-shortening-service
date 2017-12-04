@@ -4,13 +4,42 @@
 {{ object.shortcode }} | {{ block.super }}
 {% endblock title %}
 
+{% block styles %}
+<style>
+body {
+      background-color: #03396c;
+    }
+    .btn-link {
+      color: #ead61c;
+      text-shadow: none;
+    }
+    .btn-link:hover {
+      color: #000000;
+    }
+</style>
+{% endblock styles %}
+
+
 {% block content %}
+<script type="text/javascript">
+    function copy_to_clipboard() {
+      var aux = document.createElement("input");
+      aux.setAttribute("value", document.getElementById('target_url').innerHTML);
+      document.body.appendChild(aux);
+      aux.select();
+      document.execCommand("copy");
+      document.body.removeChild(aux);
+
+    }
+</script>
+
 <div class=''>
     <h1>Success!</h1>
 
     <p>{{ object.url }}</p>
 
-    <p><a class='btn btn-link' href='{{ object.get_short_url }}'>{{ object.get_short_url }}</a></p>
+    <p><a class='btn btn-link' href='{{ object.get_short_url }}' id="target_url">{{ object.get_short_url }}</a></p>
     <a class='btn btn-default' href='/'>+ New</a>
+    <a class='btn btn-default' href='#' onclick="copy_to_clipboard();">Copy</a>
 </div>
 {% endblock content %}
