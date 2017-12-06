@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 
-
+# url의 유효성을 검사한다
 def validate_url(value):
     url_validator = URLValidator()
     reg_val = value

@@ -40,6 +40,7 @@ class ShortenerURL(models.Model):
         # shortcode가 없거나 빈 문자열인 경우 새로운 url을 할당한다
         if self.shortcode is None or self.shortcode == "":
             print('+++++++++++save q.id: ', self.pk) #test
+            # DB pk를 base64로 인코딩한 shorten url을 할당한다
             self.shortcode = encode_id(self.pk)
 
         # 입력한 url에 http가 없으면 붙여서 저장한다

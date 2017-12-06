@@ -4,6 +4,7 @@ from django.views import View
 
 from .forms import SubmitUrlForm
 from .models import ShortenerURL
+from .utils import decode_id
 
 
 class HomeView(View):
@@ -50,8 +51,12 @@ class HomeView(View):
 
 class URLRedirectView(View):
     def get(self, request, shortcode=None, *args, **kwargs):
+        # 입력한 short url을 이용하여 DB pk을 얻는다
+        obj_id = decode_id(shortcode)
+
         # 입력한 short url을 이용하여 ShortenerURL query set을 가져온다
-        qs = ShortenerURL.objects.filter(shortcode__iexact=shortcode)
+        qs = ShortenerURL.objects.filter(pk=obj_id)
+        # qs = ShortenerURL.objects.filter(shortcode__iexact=shortcode)
         obj_url = None
 
         # 입력한 short url에 해당하는 객체가 여러 개이거나 없으면 404에러 처리
